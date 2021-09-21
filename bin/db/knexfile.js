@@ -20,6 +20,7 @@ module.exports = {
         "store",
         "product",
         "product_data",
+        "saved_accomplishments",
         "parent_household",
         "child_household",
         "child_store",

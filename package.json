@@ -9,7 +9,7 @@
     "dev": "cross-env NODE_ENV=development nodemon index.js",
     "migrate_latest": "npx knex migrate:latest --knexfile bin/db/knexfile.js",
     "seed": "npx knex --knexfile bin/db/knexfile.js seed:run",
-    "create_table": "npx knex --knexfile bin/db/knexfile.js migrate:make",
+    "migration": "npx knex --knexfile bin/db/knexfile.js migrate:make",
     "build_db": "cross-env yarn migrate_latest && yarn seed",
     "insert_row": "npx knex --knexfile bin/db/knexfile.js seed:make",
     "test_production": "cross-env NODE_ENV=production node index.js"

@@ -1,5 +1,5 @@
 exports.up = function (knex) {
-  return knex.schema.createTable("accomplishment", (table) => {
+  return knex.schema.createTable("saved_accomplishment", (table) => {
     table.increments();
     table.string("title").notNullable();
     table.float("value").notNullable();
@@ -8,6 +8,7 @@ exports.up = function (knex) {
       .integer("household_id")
       .references("household.id")
       .onDelete("SET NULL");
+    table.integer("child_id").references("child.id").onDelete("SET NULL");
     table.integer("avatar_id").references("avatar.id").onDelete("SET NULL");
     table.integer("status").notNullable().default(1);
     table.timestamps(true, true);
@@ -15,5 +16,5 @@ exports.up = function (knex) {
 };
 
 exports.down = function (knex) {
-  return knex.schema.dropTable("accomplishment");
+  return knex.schema.dropTable("saved_accomplishment");
 };

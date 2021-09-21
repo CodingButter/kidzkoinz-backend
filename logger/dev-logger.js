@@ -15,7 +15,15 @@ const buildDevLogger = () => {
       errors({ stack: true }),
       logFormat
     ),
-    transports: [new transports.Console()],
+    transports: [
+      new transports.File({ filename: "logs/dev/error.log", level: "error" }),
+      new transports.File({
+        filename: "logs/dev/warning.log",
+        level: "warning",
+      }),
+      new transports.File({ filename: "logs/dev/debug.log", level: "debug" }),
+      new transports.Console(),
+    ],
   });
 };
 module.exports = buildDevLogger;

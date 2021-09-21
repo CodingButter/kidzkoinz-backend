@@ -1,8 +1,30 @@
 const { gql } = require("apollo-server-express");
 const typeDefs = gql`
   extend type Query {
-    child(id: Int): Child
-    children(parentId: Int, householdId: Int): [Child]
+    child(id: Int!): Child
+    children(lookupId: Int!, lookupType: ChildLookupType!): [Child]
+  }
+
+  extend type Mutation {
+    createChild(
+      firtname: String!
+      lastname: String!
+      avatarId: Int!
+      birthday: String!
+      password: String!
+      balance: Float
+    ): Child
+
+    updateChild(
+      childId: Int!
+      firtname: String
+      lastname: String
+      avatarId: Int
+      birthday: String
+      password: String
+      balance: Float
+      status: Status
+    ): Child
   }
 
   type Child {
@@ -11,12 +33,20 @@ const typeDefs = gql`
     lastname: String
     avatar: ImageSet
     age: Int
-    birthday: Birthday
+    birthday: String
     household: [Household]
     parents: [Parent]
     balance: Int
     favorites: [Product]
+    purchases: [Purchase]
     stores: [Store]
+    accomplishments: [Accomplishment]
+  }
+
+  enum ChildLookupType {
+    PARENT_ID
+    HOUSEHOLD_ID
+    STORE_ID
   }
 `;
 
@@ -24,6 +54,10 @@ const resolvers = {
   Query: {
     children: (root, params, dataSources) => {},
     child: (root, params, dataSources) => {},
+  },
+  Mutation: {
+    createChild: (root, params, dataSources) => {},
+    updateChild: (root, params, dataSources) => {},
   },
   Child: {
     id: (root, params, dataSources) => {},
@@ -37,6 +71,7 @@ const resolvers = {
     balance: (root, params, dataSources) => {},
     favorites: (root, params, dataSources) => {},
     stores: (root, params, dataSources) => {},
+    accomplishments: (root, params, dataSources) => {},
   },
 };
 
