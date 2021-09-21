@@ -1,0 +1,41 @@
+{
+  "name": "grab-movies",
+  "version": "1.0.1",
+  "description": "the schema for a graphql media datail api",
+  "main": "index.js",
+  "scripts": {
+    "addcommit": "git add --all && git commit",
+    "addcommitpush": "git add --all && git commit && git push",
+    "dev": "cross-env NODE_ENV=development nodemon index.js",
+    "migrate_latest": "npx knex migrate:latest --knexfile bin/db/knexfile.js",
+    "seed": "npx knex --knexfile bin/db/knexfile.js seed:run",
+    "create_table": "npx knex --knexfile bin/db/knexfile.js migrate:make",
+    "build_db": "cross-env yarn migrate_latest && yarn seed",
+    "insert_row": "npx knex --knexfile bin/db/knexfile.js seed:make",
+    "test_production": "cross-env NODE_ENV=production node index.js"
+  },
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/CodingButter/GrabMovies.git"
+  },
+  "author": "CodingButter",
+  "license": "ISC",
+  "keywords": [],
+  "dependencies": {
+    "@apollo/federation": "^0.32.0",
+    "apollo-datasource-rest": "^3.2.0",
+    "apollo-server": "^3.3.0",
+    "apollo-server-express": "^3.3.0",
+    "cross-env": "^7.0.3",
+    "datasource-sql": "^1.5.0",
+    "dotenv": "^10.0.0",
+    "express": "^4.17.1",
+    "graphql": "^15.5.3",
+    "graphql-to-json-converter": "^1.2.0",
+    "knex": "^0.95.11",
+    "moment": "^2.29.1",
+    "nodemon": "^2.0.12",
+    "sqlite3": "^5.0.2",
+    "winston": "^3.3.3"
+  }
+}
