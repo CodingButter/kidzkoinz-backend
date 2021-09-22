@@ -1,0 +1,7 @@
+{
+  "dataSource": {
+    "base": "https://url.to/api",
+    "key_name": "<api_key_name>",
+    "key_value": "<api_key>"
+  }
+}
