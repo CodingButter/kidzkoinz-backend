@@ -1,0 +1,13 @@
+name,seq
+knex_migrations_lock,1
+knex_migrations,15
+avatar,10
+child,4
+child_accomplishment,4
+external_source,1
+household,3
+parent,4
+product,6
+product_data,6
+saved_accomplishment,2
+store,3

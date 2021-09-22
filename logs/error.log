@@ -1,0 +1,8 @@
+{"errno":1,"code":"SQLITE_ERROR","level":"error","service":"apollo-server","timestamp":"2021-09-22T01:30:18.506Z"}
+{"errno":1,"code":"SQLITE_ERROR","level":"error","service":"apollo-server","timestamp":"2021-09-22T01:32:52.294Z"}
+{"errno":1,"code":"SQLITE_ERROR","level":"error","service":"apollo-server","timestamp":"2021-09-22T01:33:26.019Z"}
+{"errno":1,"code":"SQLITE_ERROR","level":"error","service":"apollo-server","timestamp":"2021-09-22T01:34:02.032Z"}
+{"errno":1,"code":"SQLITE_ERROR","level":"error","service":"apollo-server","timestamp":"2021-09-22T01:34:47.851Z"}
+{"errno":1,"code":"SQLITE_ERROR","level":"error","service":"apollo-server","timestamp":"2021-09-22T01:37:42.616Z"}
+{"errno":1,"code":"SQLITE_ERROR","level":"error","service":"apollo-server","timestamp":"2021-09-22T01:39:35.339Z"}
+{"errno":1,"code":"SQLITE_ERROR","level":"error","service":"apollo-server","timestamp":"2021-09-22T01:40:25.505Z"}
