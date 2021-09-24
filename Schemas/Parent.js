@@ -1,5 +1,4 @@
-const { gql } = require("apollo-server-express");
-const typeDefs = gql`
+const typeDefs = `
   extend type Query {
     parents(lookupId: Int!, lookupType: ParentLookupType!): [Parent]
     parent(id: Int): Parent
@@ -12,23 +11,24 @@ const typeDefs = gql`
       avatarId: Int
       birthday: String
     ): Parent
+
     updateParent(
       firstname: String!
       lastname: String!
       avatarId: Int
       birthday: String
-      status: Status
+      status: Int
     ): Parent
   }
 
   type Parent {
     id: Int
-    firtname: String
+    firstname: String
     lastname: String
-    avatar: ImageSet
+    avatar: Avatar
     age: Int
     birthday: String
-    household: [Household]
+    households: [Household]
     children: [Child]
     balance: Float
     stores: [Store]
@@ -47,18 +47,25 @@ const resolvers = {
     parent: (root, params, dataSources) => {},
   },
   Mutation: {
-    createParents: (root, params, dataSources) => {},
-    updateParents: (root, params, dataSources) => {},
+    createParent: (root, params, dataSources) => {},
+    updateParent: (root, params, dataSources) => {},
   },
   Parent: {
-    id: (root, params, dataSources) => {},
-    firstname: (root, params, dataSources) => {},
-    lastname: (root, params, dataSources) => {},
-    birthday: (root, params, dataSources) => {},
-    household: (root, params, dataSources) => {},
-    children: (root, params, dataSources) => {},
-    balance: (root, params, dataSources) => {},
-    stores: (root, params, dataSources) => {},
+    id: ({ id }) => id,
+    balance: ({ balance }) => balance,
+    birthday: ({ birthday }) => birthday,
+    firstname: ({ first_name }) => first_name,
+    lastname: ({ last_name }) => last_name,
+    age: ({ birthday }, _, { dataSources }) =>
+      dataSources.knexDataSource.getAgeFromBirthday(birthday),
+    avatar: ({ avatar_id }, _, { dataSources }) =>
+      dataSources.knexDataSource.getAvatarById(avatar_id),
+    households: ({ id }, _, { dataSources }) =>
+      dataSources.knexDataSource.getHouseholdByParentId(id),
+    children: ({ id }, params, { dataSources }) =>
+      dataSources.knexDataSource.getChildrenByParentId(id),
+    stores: ({ id }, params, { dataSources }) =>
+      dataSources.knexDataSource.getStoresByParentId(id),
   },
 };
 

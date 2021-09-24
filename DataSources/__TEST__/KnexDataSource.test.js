@@ -1,17 +1,34 @@
-const Knex = require("knex");
-const knexfile = require("../../bin/db/knexfile")["development"];
-const KnexDatasource = require("../KnexDataSource");
-const knexDataSource = new KnexDatasource(knexfile);
-const knex = new Knex(knexfile);
+const knexConfig = require("../../bin/db/knexfile")["development"];
+const db = require("knex")(knexConfig);
+const KnexDataSource = require("../KnexDataSource");
+const logger = require("../../logger");
+const knexDataSource = new KnexDataSource(db);
+
 describe("Get Child By Id", () => {
   test("check if result is child 1", async () => {
-    const child = await knexDataSource.getChildById(1);
-    const expectation = await knex("child").select().where({ id: 1 });
-    expect(child).toEqual(expectation);
+    const {
+      avatar_id,
+      balance,
+      birthday,
+      first_name,
+      id,
+      last_name,
+      password,
+      status,
+    } = await knexDataSource.getChildById(1);
+
+    expect(avatar_id).toEqual(3);
+    expect(balance).toEqual(20);
+    expect(birthday).toEqual("1999-02-06");
+    expect(first_name).toEqual("andrew");
+    expect(id).toEqual(1);
+    expect(last_name).toEqual("nichols");
+    expect(password).toEqual("mypassword");
+    expect(status).toEqual(1);
   });
 });
 
-/*describe("Get Children By a Parent id", () => {
+describe("Get Children By a Parent id", () => {
   test("check if an array containing child 1 in child table exists", async () => {
     const children = await knexDataSource.getChildrenByParent(1);
 
@@ -20,6 +37,5 @@ describe("Get Child By Id", () => {
     expect(children.length).toEqual(1);
     expect(children[0].id).toEqual(1);
   });
-  
 });
 */

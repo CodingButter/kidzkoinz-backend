@@ -1,7 +1,6 @@
-const { gql } = require("apollo-server-express");
-const typeDefs = gql`
+const typeDefs = `
   extend type Query {
-    purchases(lookupId: Int!, lookupType: PurchaseLookupType): [Purchase]
+    purchases(lookupId: Int!, lookupType: PurchaseLookupType!): [Purchase]
   }
 
   extend type Mutation {
@@ -38,7 +37,7 @@ const resolvers = {
   Purchase: {
     child: (root, params, dataSources) => {},
     product: (root, params, dataSources) => {},
-    purchase_price: (root, params, dataSources) => {},
+    price: (root, params, dataSources) => {},
     time: (root, params, dataSources) => {},
   },
 };

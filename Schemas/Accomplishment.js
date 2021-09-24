@@ -1,18 +1,16 @@
-const { gql } = require("apollo-server-express");
-const typeDefs = gql`
+const typeDefs = `
   extend type Query {
     childAccomplishments(
       lookupId: Int!
       lookupType: AccomplishmentLookupType!
-      status: ApprovableStatus
+      status: Int
     ): [Accomplishment]
+
     savedAccomplishments(
       lookupId: Int!
       lookupType: AccomplishmentLookupType!
-      status: Status
+      status: Int
     ): [Accomplishment]
-    childAccomplishment(accomplishmentId: Int!): Accomplishment
-    savedAccomplishment(accomplishmentId: Int!): Accomplishment
   }
 
   extend type Mutation {
@@ -33,12 +31,12 @@ const typeDefs = gql`
     ): Accomplishment
 
     updateSavedAccomplishment(
-      id: Int
+      id: Int!
       childId: Int
-      householdId: Int
       title: String
       avatarId: Int
       value: Float
+      status: Int
     ): Accomplishment
 
     updateChildAccomplishment(
@@ -48,16 +46,18 @@ const typeDefs = gql`
       title: String
       avatarId: Int
       value: Float
+      status: Int
     ): Accomplishment
   }
 
   type Accomplishment {
     id: Int
-    childId: Int
-    householdId: Int
+    child: Child
+    household: Household
+    parent: Parent
     title: String
     description: String
-    avatar: ImageSet
+    avatar: Avatar
     value: Float
     status: Int
   }
@@ -71,8 +71,49 @@ const typeDefs = gql`
 
 const resolvers = {
   Query: {
-    children: (root, params, dataSources) => {},
-    child: (root, params, dataSources) => {},
+    savedAccomplishments: async (
+      _,
+      { lookupId, status, lookupType },
+      { dataSources }
+    ) => {
+      switch (lookupType) {
+        case "CHILD_ID":
+          return await dataSources.knexDataSource.getSavedAccomplishmentsByChildId(
+            lookupId
+          );
+        case "HOUSEHOLD_ID":
+          return await dataSources.knexDataSource.getSavedAccomplishmentsByHouseholdId(
+            lookupId
+          );
+        case "PARENT_ID":
+          return await dataSources.knexDataSource.getSavedAccomplishmentsByParentId(
+            lookupId
+          );
+        default:
+      }
+    },
+
+    childAccomplishments: async (
+      _,
+      { lookupId, status, lookupType },
+      { dataSources }
+    ) => {
+      switch (lookupType) {
+        case "CHILD_ID":
+          return await dataSources.knexDataSource.getChildAccomplishmentsByChildId(
+            lookupId
+          );
+        case "HOUSEHOLD_ID":
+          return await dataSources.knexDataSource.getChildAccomplishmentsByHouseholdId(
+            lookupId
+          );
+        case "PARENT_ID":
+          return await dataSources.knexDataSource.getChildAccomplishmentsByParentId(
+            lookupId
+          );
+        default:
+      }
+    },
   },
   Mutation: {
     createSavedAccomplishment: (root, params, dataSources) => {},
@@ -81,15 +122,15 @@ const resolvers = {
     updateChildAccomplishment: (root, params, dataSources) => {},
   },
   Accomplishment: {
-    id: (root, params, dataSources) => {},
-    childId: (root, params, dataSources) => {},
-    householdId: (root, params, dataSources) => {},
-    title: (root, params, dataSources) => {},
-    description: (root, params, dataSources) => {},
-    avatar: (root, params, dataSources) => {},
-    value: (root, params, dataSources) => {},
-    status: (root, params, dataSources) => {},
+    id: ({ id }) => id,
+    child: ({ child_id }, _, { dataSources }) => {},
+    household: ({ child_id }, _, { dataSources }) => {},
+    parent: ({ parent_id }, _, { dataSources }) => {},
+    title: ({ title }) => title,
+    description: ({ description }) => description,
+    avatar: ({ avatar_id }, _, { dataSources }) => {},
+    value: ({ value }) => value,
+    status: ({ status }) => status,
   },
 };
-
 module.exports = { typeDefs, resolvers };

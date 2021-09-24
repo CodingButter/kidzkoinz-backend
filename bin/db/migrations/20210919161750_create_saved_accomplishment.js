@@ -8,6 +8,7 @@ exports.up = function (knex) {
       .integer("household_id")
       .references("household.id")
       .onDelete("SET NULL");
+    table.integer("parent_id").references("parent.id").onDelete("SET NULL");
     table.integer("child_id").references("child.id").onDelete("SET NULL");
     table.integer("avatar_id").references("avatar.id").onDelete("SET NULL");
     table.integer("status").notNullable().default(1);

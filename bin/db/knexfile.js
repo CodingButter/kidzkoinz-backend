@@ -1,16 +1,18 @@
+const path = require("path");
 module.exports = {
   development: {
     client: "sqlite3",
     connection: {
-      filename: `kidzkoinz.db`,
+      filename: path.resolve(__dirname, "kidzkoinz.db"),
     },
+
     useNullAsDefault: true,
     migrations: {
-      directory: "migrations",
+      directory: path.resolve(__dirname, "migrations"),
       tableName: "knex_migrations",
     },
     seeds: {
-      directory: "seeds",
+      directory: path.resolve(__dirname, "seeds"),
       specific: [
         "external_source",
         "avatar",

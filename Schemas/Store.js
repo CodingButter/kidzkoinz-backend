@@ -1,8 +1,7 @@
-const { gql } = require("apollo-server-express");
-const typeDefs = gql`
+const typeDefs = `
   extend type Query {
     store(id: Int): Store
-    stores(lookupId: Int!, lookupType: ProductLookupType): [Store]
+    stores(lookupId: Int!, lookupType: ProductLookupType!): [Store]
   }
 
   extend type Mutation {
@@ -11,21 +10,21 @@ const typeDefs = gql`
       title: String
       avatarId: Int!
       householdId: Int!
-      childIds: [Int]
-      status: Status
+      status: Int
     ): Store
   }
 
   type Store {
     id: Int
     title: String
-    avatar: ImageSet
+    avatar: Avatar
     household: Household
     children: [Child]
     parent: [Parent]
     products: [Product]
     purchases: [Purchase]
   }
+
   enum StoreLookupType {
     PARENT_ID
     HOUSEHOLD_ID
@@ -41,6 +40,7 @@ const resolvers = {
   Store: {
     id: (root, params, dataSources) => {},
     household: (root, params, dataSources) => {},
+    avatar: (root, params, dataSources) => {},
     children: (root, params, dataSources) => {},
     products: (root, params, dataSources) => {},
   },

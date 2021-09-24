@@ -1,8 +1,9 @@
 const logger = require("../logger");
 const fs = require("fs");
 const { gql } = require("apollo-server-core");
-const { buildFederatedSchema } = require("@apollo/federation");
-const QueryType = gql`
+const GMR = require("graphql-merge-resolvers");
+
+const QueryType = `
   type Query {
     _empty: String
   }
@@ -10,7 +11,7 @@ const QueryType = gql`
     _empty: String
   }
 `;
-const QueryResolver = {};
+
 const typeDefResolvers = fs
   .readdirSync(__dirname)
   .filter(
@@ -20,16 +21,12 @@ const typeDefResolvers = fs
   )
   .map((file) => {
     const { typeDefs, resolvers } = require(`./${file}`);
-
     return { typeDefs, resolvers };
   });
+const typeDefs = gql(
+  [QueryType, ...typeDefResolvers.map(({ typeDefs }) => typeDefs)].join("\n")
+);
 
-const typeDefs = [
-  QueryType,
-  ...typeDefResolvers.map(({ typeDefs }) => typeDefs),
-];
-const resolvers = [
-  QueryResolver,
-  ...typeDefResolvers.map(({ resolvers }) => resolvers),
-];
-module.exports = buildFederatedSchema({ typeDefs, resolvers });
+const resolvers = GMR.merge(typeDefResolvers.map(({ resolvers }) => resolvers));
+
+module.exports = { typeDefs, resolvers };

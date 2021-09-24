@@ -4,7 +4,7 @@ exports.up = function (knex) {
     table.integer("product_id").references("product.id").onDelete("SET NULL");
     table.float("purchase_price").notNullable();
     table.text("tracking");
-    table.integer("status").default(0, "Pending Approval");
+    table.integer("status").default(1, "Pending Approval");
     table.timestamps(true, true);
   });
 };

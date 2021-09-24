@@ -3,3 +3,4 @@ yarn-error.log
 yarn.lock
 config.json
 /bin/db/kidzkoinz.db
+.env

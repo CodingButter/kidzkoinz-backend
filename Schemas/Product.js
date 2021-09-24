@@ -1,5 +1,4 @@
-const { gql } = require("apollo-server-express");
-const typeDefs = gql`
+const typeDefs = `
   extend type Query {
     products(lookupId: Int!, lookupType: ProductLookupType!): [Product]
     product(id: Int!): Product

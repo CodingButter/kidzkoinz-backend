@@ -1,5 +1,0 @@
-id,title,child_id,value,description,avatar_id,status,created_at,updated_at
-1,Getting Good Grades,1,5.0,For getting a good grade in math,9,3,2021-09-21 15:13:40,2021-09-21 15:13:40
-2,Getting Good Grades,2,10.0,For getting a good grade in math,9,2,2021-09-21 15:13:40,2021-09-21 15:13:40
-3,Getting Good Grades,2,10.0,For getting a good grade in math,9,1,2021-09-21 15:13:40,2021-09-21 15:13:40
-4,Cleaning Your Room,3,2.0,For Cleaning You Entire Room,10,2,2021-09-21 15:13:40,2021-09-21 15:13:40
