@@ -21,17 +21,17 @@ const typeDefs = `
 
 const resolvers = {
   Query: {
-    avatar: async (root, { id }, { dataSources }) =>
+    avatar: (root, { id }, { dataSources }) =>
       dataSources.knexDataSource.getAvatarById(id),
-    childAvatars: async (root, _, { dataSources }) =>
+    childAvatars: (root, _, { dataSources }) =>
       dataSources.knexDataSource.getChildAvatars(),
-    parentAvatars: async (root, _, { dataSources }) =>
+    parentAvatars: (root, _, { dataSources }) =>
       dataSources.knexDataSource.getParentAvatars(),
-    householdAvatars: async (root, _, { dataSources }) =>
+    householdAvatars: (root, _, { dataSources }) =>
       dataSources.knexDataSource.getHouseholdAvatars(),
-    storeAvatars: async (root, _, { dataSources }) =>
+    storeAvatars: (root, _, { dataSources }) =>
       dataSources.knexDataSource.getStoreAvatars(),
-    accomplishmentAvatars: async (root, _, { dataSources }) =>
+    accomplishmentAvatars: (root, _, { dataSources }) =>
       dataSources.knexDataSource.getAccomplishmentAvatars(),
   },
   Avatar: {

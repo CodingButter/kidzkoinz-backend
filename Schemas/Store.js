@@ -32,17 +32,22 @@ const typeDefs = `
     PRODUCT_ID
   }
 `;
+
 const resolvers = {
   Query: {
-    stores: (root, params, dataSources) => {},
-    store: (root, params, dataSources) => {},
+    stores: (_, { lookupId, lookupType }, { dataSources }) => {},
+    store: (_, { id }, { dataSources }) => dataSources.getStoreById(id),
   },
   Store: {
-    id: (root, params, dataSources) => {},
-    household: (root, params, dataSources) => {},
-    avatar: (root, params, dataSources) => {},
-    children: (root, params, dataSources) => {},
-    products: (root, params, dataSources) => {},
+    id: ({ id }, params, { dataSources }) => id,
+    household: ({ household_id }, params, { dataSources }) =>
+      dataSources.knexDataSource.getHouseholdById(household_id),
+    avatar: ({ avatar_id }, params, { dataSources }) =>
+      dataSources.knexDataSource.getAvatarById(avatar_id),
+    children: ({ id }, params, { dataSources }) =>
+      dataSources.knexDataSource.getChildrenByStoreId(id),
+    products: ({ id }, params, { dataSources }) =>
+      dataSources.knexDataSource.getProductsByStoreId(id),
   },
 };
 module.exports = { typeDefs, resolvers };

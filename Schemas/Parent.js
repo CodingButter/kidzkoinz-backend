@@ -44,7 +44,8 @@ const typeDefs = `
 const resolvers = {
   Query: {
     parents: (root, params, dataSources) => {},
-    parent: (root, params, dataSources) => {},
+    parent: (root, { id }, { dataSources }) =>
+      dataSources.knexDataSource.getParentById(id),
   },
   Mutation: {
     createParent: (root, params, dataSources) => {},

@@ -27,7 +27,23 @@ const typeDefs = `
 
 const resolvers = {
   Query: {
-    households: (root, params, { dataSources }) => {},
+    households: async (root, { lookupId, lookupType }, { dataSources }) => {
+      switch (lookupType) {
+        case "STORE_ID":
+          return await dataSources.knexDataSource.getHouseholdsByStoreId(
+            lookupId
+          );
+        case "CHILD_ID":
+          return await dataSources.knexDataSource.getHouseholdsByChildId(
+            lookupId
+          );
+        case "PARENT_ID":
+          return await dataSources.knexDataSource.getHouseholdsByParentId(
+            lookupId
+          );
+        default:
+      }
+    },
     household: (root, { id }, { dataSources }) =>
       dataSources.getHouseholdById({ id }),
   },

@@ -22,7 +22,46 @@ class KnexDataSource {
       image: this.getImageSet(`${this.localImageBase}avatars/${path}`),
     };
   }
-
+  async getChildAvatars() {
+    const avatarIds = await this.knex("avatar")
+      .select("id")
+      .where({ type: "CHILD" });
+    return await Promise.all(
+      avatarIds.map(async ({ id }) => await this.getAvatarById(id))
+    );
+  }
+  async getParentAvatars() {
+    const avatarIds = await this.knex("avatar")
+      .select("id")
+      .where({ type: "PARENT" });
+    return await Promise.all(
+      avatarIds.map(async ({ id }) => await this.getAvatarById(id))
+    );
+  }
+  async getHouseholdAvatars() {
+    const avatarIds = await this.knex("avatar")
+      .select("id")
+      .where({ type: "HOUSEHOLD" });
+    return await Promise.all(
+      avatarIds.map(async ({ id }) => await this.getAvatarById(id))
+    );
+  }
+  async getStoreAvatars() {
+    const avatarIds = await this.knex("avatar")
+      .select("id")
+      .where({ type: "STORE" });
+    return await Promise.all(
+      avatarIds.map(async ({ id }) => await this.getAvatarById(id))
+    );
+  }
+  async getAccomplishmentAvatars() {
+    const avatarIds = await this.knex("avatar")
+      .select("id")
+      .where({ type: "ACCOMPLISHMENT" });
+    return await Promise.all(
+      avatarIds.map(async ({ id }) => await this.getAvatarById(id))
+    );
+  }
   //Child
   async getChildById(id) {
     const [child] = await this.knex.select("*").from("child").where({ id });
@@ -52,7 +91,7 @@ class KnexDataSource {
 
   //Product
   async getProductById(id) {
-    const [product] = await this.knex.select("*").from("product").where({ id });
+    const [product] = await this.knex("product").where({ id });
     return product;
   }
 
@@ -81,7 +120,7 @@ class KnexDataSource {
   //Households
 
   // by Child
-  async getHouseholdByChildId(child_id) {
+  async getHouseholdsByChildId(child_id) {
     const householdIds = this.knex("child_household")
       .select("household_id")
       .where("child_id", child_id);
@@ -89,10 +128,17 @@ class KnexDataSource {
   }
 
   // By Parent
-  async getHouseholdByParentId(parent_id) {
+  async getHouseholdsByParentId(parent_id) {
     const householdIds = this.knex("parent_household")
       .select("household_id")
       .where("parent_id", parent_id);
+    return await this.knex("household").whereIn("id", householdIds);
+  }
+
+  async getHouseholdsByStoreId(id) {
+    const householdIds = this.knex("store")
+      .select("household_id")
+      .where({ id });
     return await this.knex("household").whereIn("id", householdIds);
   }
 
@@ -156,13 +202,17 @@ class KnexDataSource {
   //Products
 
   //Products by Store
+
   async getProductsByStoreId(store_id) {
     return await this.knex("store").where({ store_id });
   }
 
   async getFavoritesByChildId(child_id) {
-    const productIds = this.knex("child_favorite").where({ child_id });
-    return await this.knex("product").whereIn(productIds);
+    return await this.knex("child_favorite").where({ child_id });
+  }
+
+  async getPurchasesByChildId(child_id) {
+    return this.knex("child_purchase").where({ child_id });
   }
 
   async getChildAccomplishmentsByChildId(child_id) {
@@ -216,7 +266,41 @@ class KnexDataSource {
         children.map(({ id }) => id)
       );
   }
+  async getLocalImagesByExternalProductId(external_product_id) {
+    const images = await this.knex("product_data").where({
+      data_type: "local_image",
+      external_product_id,
+    });
+    const imageSets = images.map(({ data }) =>
+      this.getImageSet(`${this.localImageBase}products/${data}`)
+    );
+    return imageSets;
+  }
 
+  async getRemoteImagesByExternalProductId(
+    external_source_id,
+    external_product_id
+  ) {
+    const images = await this.knex("product_data").where({
+      data_type: "remote_image",
+      external_product_id,
+    });
+    const imageSets = await Promise.all(
+      images.map(async ({ data }) =>
+        this.getImageSet(
+          await this.getPathExternalSourceId(data, external_source_id)
+        )
+      )
+    );
+    return imageSets;
+  }
+  async getPathExternalSourceId(path, id) {
+    const [externalSource] = await this.knex("external_source").select(
+      "image_base_url"
+    );
+    const { image_base_url } = externalSource;
+    return `${image_base_url}${path}`;
+  }
   getAgeFromBirthday(birthday) {
     var today = new Date();
     var birthDate = new Date(birthday);

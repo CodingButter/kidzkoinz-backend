@@ -71,44 +71,44 @@ const typeDefs = `
 
 const resolvers = {
   Query: {
-    savedAccomplishments: async (
+    savedAccomplishments: (
       _,
       { lookupId, status, lookupType },
       { dataSources }
     ) => {
       switch (lookupType) {
         case "CHILD_ID":
-          return await dataSources.knexDataSource.getSavedAccomplishmentsByChildId(
+          return dataSources.knexDataSource.getSavedAccomplishmentsByChildId(
             lookupId
           );
         case "HOUSEHOLD_ID":
-          return await dataSources.knexDataSource.getSavedAccomplishmentsByHouseholdId(
+          return dataSources.knexDataSource.getSavedAccomplishmentsByHouseholdId(
             lookupId
           );
         case "PARENT_ID":
-          return await dataSources.knexDataSource.getSavedAccomplishmentsByParentId(
+          return dataSources.knexDataSource.getSavedAccomplishmentsByParentId(
             lookupId
           );
         default:
       }
     },
 
-    childAccomplishments: async (
+    childAccomplishments: (
       _,
       { lookupId, status, lookupType },
       { dataSources }
     ) => {
       switch (lookupType) {
         case "CHILD_ID":
-          return await dataSources.knexDataSource.getChildAccomplishmentsByChildId(
+          return dataSources.knexDataSource.getChildAccomplishmentsByChildId(
             lookupId
           );
         case "HOUSEHOLD_ID":
-          return await dataSources.knexDataSource.getChildAccomplishmentsByHouseholdId(
+          return dataSources.knexDataSource.getChildAccomplishmentsByHouseholdId(
             lookupId
           );
         case "PARENT_ID":
-          return await dataSources.knexDataSource.getChildAccomplishmentsByParentId(
+          return dataSources.knexDataSource.getChildAccomplishmentsByParentId(
             lookupId
           );
         default:
@@ -123,14 +123,18 @@ const resolvers = {
   },
   Accomplishment: {
     id: ({ id }) => id,
-    child: ({ child_id }, _, { dataSources }) => {},
-    household: ({ child_id }, _, { dataSources }) => {},
-    parent: ({ parent_id }, _, { dataSources }) => {},
-    title: ({ title }) => title,
-    description: ({ description }) => description,
-    avatar: ({ avatar_id }, _, { dataSources }) => {},
     value: ({ value }) => value,
     status: ({ status }) => status,
+    title: ({ title }) => title,
+    child: ({ child_id }, _, { dataSources }) =>
+      dataSources.knexDataSource.getChildById(child_id),
+    household: ({ household_id }, _, { dataSources }) =>
+      dataSources.knexDataSource.getHouseholdById(household_id),
+    parent: ({ parent_id }, _, { dataSources }) =>
+      dataSources.knexDataSource.getParentById(parent_id),
+    description: ({ description }) => description,
+    avatar: ({ avatar_id }, _, { dataSources }) =>
+      dataSources.knexDataSource.getAvatarById(avatar_id),
   },
 };
 module.exports = { typeDefs, resolvers };

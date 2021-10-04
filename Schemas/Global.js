@@ -17,6 +17,13 @@ const typeDefs = `
     medium: String
     large: String
   }
+
+  type Video{
+    id: Int
+    title: String
+    path:String
+    source:String
+  }
 `;
 
 const resolvers = {};

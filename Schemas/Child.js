@@ -51,26 +51,19 @@ const typeDefs = `
 
 const resolvers = {
   Query: {
-    children: async (_, { lookupId, lookupType }, { dataSources }) => {
+    children: (_, { lookupId, lookupType }, { dataSources }) => {
       switch (lookupType) {
         case "STORE_ID":
-          return await dataSources.knexDataSource.getChildrenByStoreId(
-            lookupId
-          );
+          return dataSources.knexDataSource.getChildrenByStoreId(lookupId);
         case "HOUSEHOLD_ID":
-          return await dataSources.knexDataSource.getChildrenByHouseholdId(
-            lookupId
-          );
+          return dataSources.knexDataSource.getChildrenByHouseholdId(lookupId);
         case "PARENT_ID":
-          return await dataSources.knexDataSource.getChildrenByParentId(
-            lookupId
-          );
+          return dataSources.knexDataSource.getChildrenByParentId(lookupId);
         default:
       }
     },
-    child: async (root, { id }, { dataSources }) => {
-      return await dataSources.knexDataSource.getChildById(id);
-    },
+    child: async (root, { id }, { dataSources }) =>
+      dataSources.knexDataSource.getChildById(id),
   },
   Mutation: {
     createChild: (root, params, { dataSources }) => {},
@@ -78,7 +71,7 @@ const resolvers = {
   },
   Child: {
     id: ({ id }) => id,
-    balance: ({ balance }, _, { dataSources }) => balance,
+    balance: ({ balance }) => balance,
     birthday: ({ birthday }) => birthday,
     firstname: ({ first_name }) => first_name,
     lastname: ({ last_name }) => last_name,
@@ -87,7 +80,7 @@ const resolvers = {
     avatar: ({ avatar_id }, _, { dataSources }) =>
       dataSources.knexDataSource.getAvatarById(avatar_id),
     households: ({ id }, _, { dataSources }) =>
-      dataSources.knexDataSource.getHouseholdByChildId(id),
+      dataSources.knexDataSource.getHouseholdsByChildId(id),
     parents: ({ id }, _, { dataSources }) =>
       dataSources.knexDataSource.getParentsByChildId(id),
     favorites: ({ id }, _, { dataSources }) =>
@@ -96,6 +89,8 @@ const resolvers = {
       dataSources.knexDataSource.getStoresByChildId(id),
     accomplishments: ({ id }, _, { dataSources }) =>
       dataSources.knexDataSource.getChildAccomplishmentsByChildId(id),
+    purchases: ({ id }, _, { dataSources }) =>
+      dataSources.knexDataSource.getPurchasesByChildId(id),
   },
 };
 

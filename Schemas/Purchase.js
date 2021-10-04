@@ -13,8 +13,6 @@ const typeDefs = `
     product: Product
     price: Int
     time: String
-    store: Store
-    household: Household
     status: ApprovableStatus
   }
 
@@ -28,17 +26,20 @@ const typeDefs = `
 
 const resolvers = {
   Query: {
-    purchases: (root, params, dataSources) => {},
+    purchases: (root, { childId }, { dataSources }) =>
+      dataSources.knexDataSource.getPurchasesbyChildId(childId),
   },
   Mutation: {
-    createPurchase: (root, params, dataSources) => {},
-    updatePurchase: (root, params, dataSources) => {},
+    createPurchase: (root, params, { dataSources }) => {},
+    updatePurchase: (root, params, { dataSources }) => {},
   },
   Purchase: {
-    child: (root, params, dataSources) => {},
-    product: (root, params, dataSources) => {},
-    price: (root, params, dataSources) => {},
-    time: (root, params, dataSources) => {},
+    child: ({ child_id }, params, { dataSources }) =>
+      dataSources.knexDataSource.getChildById(child_id),
+    product: ({ product_id }, params, { dataSources }) =>
+      dataSources.knexDataSource.getProductById(product_id),
+    price: ({ price }) => price,
+    time: ({ created_at }) => created_at,
   },
 };
 module.exports = { typeDefs, resolvers };
