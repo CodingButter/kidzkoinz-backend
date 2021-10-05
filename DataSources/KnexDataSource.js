@@ -319,5 +319,24 @@ class KnexDataSource {
       large: path,
     };
   }
+
+  //Create
+  async createChild(child_data) {
+    var { first_name, last_name, avatar_id, birthday, password, balance } =
+      child_data;
+    const [id] = await this.knex("child").insert({
+      first_name,
+      last_name,
+      avatar_id,
+      birthday,
+      password,
+      balance,
+    });
+    await this.knex("child_household").insert({
+      child_id: id,
+      household_id: child_data.household_id,
+    });
+    return { id, ...child_data };
+  }
 }
 module.exports = KnexDataSource;

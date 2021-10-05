@@ -6,9 +6,10 @@ const typeDefs = `
 
   extend type Mutation {
     createChild(
-      firtname: String!
+      firstname: String!
       lastname: String!
       avatarId: Int!
+      householdId: Int!
       birthday: String!
       password: String!
       balance: Float
@@ -16,7 +17,7 @@ const typeDefs = `
 
     updateChild(
       childId: Int!
-      firtname: String
+      firstname: String
       lastname: String
       avatarId: Int
       birthday: String
@@ -66,8 +67,30 @@ const resolvers = {
       dataSources.knexDataSource.getChildById(id),
   },
   Mutation: {
-    createChild: (root, params, { dataSources }) => {},
-    updateChild: (root, params, { dataSources }) => {},
+    createChild: (
+      root,
+      {
+        firstname,
+        lastname,
+        avatarId,
+        birthday,
+        password,
+        balance,
+        householdId,
+      },
+      { dataSources }
+    ) =>
+      dataSources.knexDataSource.createChild({
+        first_name: firstname,
+        last_name: lastname,
+        avatar_id: avatarId,
+        birthday,
+        password,
+        balance,
+        household_id: householdId,
+      }),
+    updateChild: (root, child_data, { dataSources }) =>
+      dataSources.knexDataSource.updateChild(child_data),
   },
   Child: {
     id: ({ id }) => id,
