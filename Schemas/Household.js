@@ -1,18 +1,18 @@
-const { gql } = require("apollo-server-express");
-const typeDefs = gql`
+const typeDefs = `
   extend type Query {
     households(lookupId: Int!, lookupType: HouseholdLookupType!): [Household]
-    household(id: Int): Household
+    household(id: Int!): Household
   }
 
   extend type Mutation {
-    createHousehold(parent_id: Int, title: String): Household
-    updateHousehold(status: Status, title: String): Household
+    createHousehold(parentId: Int, title: String): Household
+    updateHousehold(status: Int, title: String): Household
   }
 
   type Household {
     id: Int
-    name: String
+    title: String
+    avatar: Avatar
     parents: [Parent]
     children: [Child]
     stores: [Store]
@@ -27,19 +27,41 @@ const typeDefs = gql`
 
 const resolvers = {
   Query: {
-    households: (root, params, dataSources) => {},
-    household: (root, params, dataSources) => {},
+    households: async (root, { lookupId, lookupType }, { dataSources }) => {
+      switch (lookupType) {
+        case "STORE_ID":
+          return await dataSources.knexDataSource.getHouseholdsByStoreId(
+            lookupId
+          );
+        case "CHILD_ID":
+          return await dataSources.knexDataSource.getHouseholdsByChildId(
+            lookupId
+          );
+        case "PARENT_ID":
+          return await dataSources.knexDataSource.getHouseholdsByParentId(
+            lookupId
+          );
+        default:
+      }
+    },
+    household: (root, { id }, { dataSources }) =>
+      dataSources.getHouseholdById({ id }),
   },
   Mutation: {
-    createHouseholds: (root, params, dataSources) => {},
-    updateHouseholds: (root, params, dataSources) => {},
+    createHousehold: (root, params, { dataSources }) => {},
+    updateHousehold: (root, params, { dataSources }) => {},
   },
   Household: {
-    id: (root, params, dataSources) => {},
-    name: (root, params, dataSources) => {},
-    parents: (root, params, dataSources) => {},
-    children: (root, params, dataSources) => {},
-    stores: (root, params, dataSources) => {},
+    id: ({ id }) => id,
+    title: ({ title }) => title,
+    avatar: ({ avatar_id }, _, { dataSources }) =>
+      dataSources.knexDataSource.getAvatarById(avatar_id),
+    parents: ({ id }, params, { dataSources }) =>
+      dataSources.knexDataSource.getParentsByHouseholdId(id),
+    children: ({ id }, params, { dataSources }) =>
+      dataSources.knexDataSource.getChildrenByHouseholdId(id),
+    stores: ({ id }, params, { dataSources }) =>
+      dataSources.knexDataSource.getStoresByHouseholdId(id),
   },
 };
 

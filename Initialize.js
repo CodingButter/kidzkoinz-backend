@@ -1,4 +1,6 @@
+const { typeDefs, resolvers } = require("./Schemas");
 module.exports = (config) => [
-  require("./Schemas"),
+  typeDefs,
+  resolvers,
   require("./DataSources")(config),
 ];

@@ -1,8 +1,7 @@
-const { gql } = require("apollo-server-express");
-const typeDefs = gql`
+const typeDefs = `
   extend type Query {
     store(id: Int): Store
-    stores(lookupId: Int!, lookupType: ProductLookupType): [Store]
+    stores(lookupId: Int!, lookupType: ProductLookupType!): [Store]
   }
 
   extend type Mutation {
@@ -11,21 +10,21 @@ const typeDefs = gql`
       title: String
       avatarId: Int!
       householdId: Int!
-      childIds: [Int]
-      status: Status
+      status: Int
     ): Store
   }
 
   type Store {
     id: Int
     title: String
-    avatar: ImageSet
+    avatar: Avatar
     household: Household
     children: [Child]
     parent: [Parent]
     products: [Product]
     purchases: [Purchase]
   }
+
   enum StoreLookupType {
     PARENT_ID
     HOUSEHOLD_ID
@@ -33,16 +32,22 @@ const typeDefs = gql`
     PRODUCT_ID
   }
 `;
+
 const resolvers = {
   Query: {
-    stores: (root, params, dataSources) => {},
-    store: (root, params, dataSources) => {},
+    stores: (_, { lookupId, lookupType }, { dataSources }) => {},
+    store: (_, { id }, { dataSources }) => dataSources.getStoreById(id),
   },
   Store: {
-    id: (root, params, dataSources) => {},
-    household: (root, params, dataSources) => {},
-    children: (root, params, dataSources) => {},
-    products: (root, params, dataSources) => {},
+    id: ({ id }, params, { dataSources }) => id,
+    household: ({ household_id }, params, { dataSources }) =>
+      dataSources.knexDataSource.getHouseholdById(household_id),
+    avatar: ({ avatar_id }, params, { dataSources }) =>
+      dataSources.knexDataSource.getAvatarById(avatar_id),
+    children: ({ id }, params, { dataSources }) =>
+      dataSources.knexDataSource.getChildrenByStoreId(id),
+    products: ({ id }, params, { dataSources }) =>
+      dataSources.knexDataSource.getProductsByStoreId(id),
   },
 };
 module.exports = { typeDefs, resolvers };

@@ -9,16 +9,19 @@ exports.seed = function (knex) {
         {
           title: "andrews store",
           household_id: 1,
+          parent_id: 1,
           avatar_id: 7,
         },
         {
           title: "noahs toys",
           household_id: 2,
+          parent_id: 2,
           avatar_id: 7,
         },
         {
           title: "flynns store",
           household_id: 3,
+          parent_id: 3,
           avatar_id: 7,
         },
       ]);

@@ -1,7 +1,9 @@
 const KnexDataSource = require("./KnexDataSource");
+const ImageSource = require("./ImageSource");
 module.exports = (config) => () => {
-  const knexSource = new KnexDataSource(config.knex[process.env.NODE_ENV]);
+  const knexDataSource = new KnexDataSource(config.knex);
   return {
-    knexSource,
+    knexDataSource,
+    ImageSource,
   };
 };

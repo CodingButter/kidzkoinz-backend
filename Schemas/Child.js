@@ -1,5 +1,4 @@
-const { gql } = require("apollo-server-express");
-const typeDefs = gql`
+const typeDefs = `
   extend type Query {
     child(id: Int!): Child
     children(lookupId: Int!, lookupType: ChildLookupType!): [Child]
@@ -23,7 +22,7 @@ const typeDefs = gql`
       birthday: String
       password: String
       balance: Float
-      status: Status
+      status: Int
     ): Child
   }
 
@@ -31,10 +30,10 @@ const typeDefs = gql`
     id: Int
     firstname: String
     lastname: String
-    avatar: ImageSet
+    avatar: Avatar
     age: Int
     birthday: String
-    household: [Household]
+    households: [Household]
     parents: [Parent]
     balance: Int
     favorites: [Product]
@@ -52,26 +51,46 @@ const typeDefs = gql`
 
 const resolvers = {
   Query: {
-    children: (root, params, dataSources) => {},
-    child: (root, params, dataSources) => {},
+    children: (_, { lookupId, lookupType }, { dataSources }) => {
+      switch (lookupType) {
+        case "STORE_ID":
+          return dataSources.knexDataSource.getChildrenByStoreId(lookupId);
+        case "HOUSEHOLD_ID":
+          return dataSources.knexDataSource.getChildrenByHouseholdId(lookupId);
+        case "PARENT_ID":
+          return dataSources.knexDataSource.getChildrenByParentId(lookupId);
+        default:
+      }
+    },
+    child: async (root, { id }, { dataSources }) =>
+      dataSources.knexDataSource.getChildById(id),
   },
   Mutation: {
-    createChild: (root, params, dataSources) => {},
-    updateChild: (root, params, dataSources) => {},
+    createChild: (root, params, { dataSources }) => {},
+    updateChild: (root, params, { dataSources }) => {},
   },
   Child: {
-    id: (root, params, dataSources) => {},
-    firtname: (root, params, dataSources) => {},
-    lastname: (root, params, dataSources) => {},
-    age: (root, params, dataSources) => {},
-    birthday: (root, params, dataSources) => {},
-    avatar: (root, params, dataSources) => {},
-    household: (root, params, dataSources) => {},
-    parents: (root, params, dataSources) => {},
-    balance: (root, params, dataSources) => {},
-    favorites: (root, params, dataSources) => {},
-    stores: (root, params, dataSources) => {},
-    accomplishments: (root, params, dataSources) => {},
+    id: ({ id }) => id,
+    balance: ({ balance }) => balance,
+    birthday: ({ birthday }) => birthday,
+    firstname: ({ first_name }) => first_name,
+    lastname: ({ last_name }) => last_name,
+    age: ({ birthday }, _, { dataSources }) =>
+      dataSources.knexDataSource.getAgeFromBirthday(birthday),
+    avatar: ({ avatar_id }, _, { dataSources }) =>
+      dataSources.knexDataSource.getAvatarById(avatar_id),
+    households: ({ id }, _, { dataSources }) =>
+      dataSources.knexDataSource.getHouseholdsByChildId(id),
+    parents: ({ id }, _, { dataSources }) =>
+      dataSources.knexDataSource.getParentsByChildId(id),
+    favorites: ({ id }, _, { dataSources }) =>
+      dataSources.knexDataSource.getFavoritesByChildId(id),
+    stores: ({ id }, _, { dataSources }) =>
+      dataSources.knexDataSource.getStoresByChildId(id),
+    accomplishments: ({ id }, _, { dataSources }) =>
+      dataSources.knexDataSource.getChildAccomplishmentsByChildId(id),
+    purchases: ({ id }, _, { dataSources }) =>
+      dataSources.knexDataSource.getPurchasesByChildId(id),
   },
 };
 
