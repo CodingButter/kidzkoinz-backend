@@ -62,7 +62,7 @@ const resolvers = {
     avatar: ({ avatar_id }, _, { dataSources }) =>
       dataSources.knexDataSource.getAvatarById(avatar_id),
     households: ({ id }, _, { dataSources }) =>
-      dataSources.knexDataSource.getHouseholdByParentId(id),
+      dataSources.knexDataSource.getHouseholdsByParentId(id),
     children: ({ id }, params, { dataSources }) =>
       dataSources.knexDataSource.getChildrenByParentId(id),
     stores: ({ id }, params, { dataSources }) =>
