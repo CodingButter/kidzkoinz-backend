@@ -396,8 +396,15 @@ class KnexDataSource {
 
   //Create Child
   async createChild(child_data) {
-    var { first_name, last_name, avatar_id, birthday, password, balance } =
-      child_data;
+    var {
+      first_name,
+      last_name,
+      avatar_id,
+      birthday,
+      password,
+      balance,
+      dashboard,
+    } = child_data;
     const [id] = await this.knex("child").insert({
       first_name,
       last_name,
@@ -405,6 +412,7 @@ class KnexDataSource {
       birthday,
       password,
       balance,
+      dashboard,
     });
     await this.knex("child_household").insert({
       child_id: id,
@@ -421,6 +429,7 @@ class KnexDataSource {
       birthday,
       password,
       balance,
+      dashboard,
       status,
     } = child_data;
     await this.knex("child")
@@ -430,6 +439,7 @@ class KnexDataSource {
         avatar_id,
         birthday,
         password,
+        dashboard,
         balance,
         status,
       })
@@ -439,8 +449,15 @@ class KnexDataSource {
 
   //Create
   async createParent(parent_data) {
-    var { first_name, last_name, avatar_id, birthday, password, balance } =
-      parent_data;
+    var {
+      first_name,
+      last_name,
+      avatar_id,
+      birthday,
+      password,
+      balance,
+      dashboard,
+    } = parent_data;
     const [id] = await this.knex("parent").insert({
       first_name,
       last_name,
@@ -448,6 +465,7 @@ class KnexDataSource {
       birthday,
       password,
       balance,
+      dashboard,
     });
     return { id, ...parent_data };
   }
@@ -461,6 +479,7 @@ class KnexDataSource {
       birthday,
       password,
       balance,
+      dashboard,
       status,
     } = parent_data;
     await this.knex("parent")
@@ -471,6 +490,7 @@ class KnexDataSource {
         birthday,
         password,
         email,
+        dashboard,
         balance,
         status,
       })
