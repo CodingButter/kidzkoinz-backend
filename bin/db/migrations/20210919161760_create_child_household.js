@@ -1,5 +1,5 @@
 exports.up = function (knex) {
-  return knex.schema.createTable("child_household", (table) => {
+  return knex.schema.createTable("child_household", table => {
     table
       .integer("child_id")
       .notNullable()

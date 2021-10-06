@@ -6,6 +6,7 @@ exports.up = function (knex) {
     table.date("birthday").notNullable();
     table.string("email").notNullable();
     table.string("password").notNullable();
+    table.string("dashboard");
     table.float("balance").default(0);
     table.integer("avatar_id").references("avatar.id").onDelete("SET NULL");
     table.integer("status").default(1);
