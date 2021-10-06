@@ -45,7 +45,7 @@ const resolvers = {
       }
     },
     household: (root, { id }, { dataSources }) =>
-      dataSources.getHouseholdById({ id }),
+      dataSources.knexDataSource.getHouseholdById(id),
   },
   Mutation: {
     createHousehold: (

@@ -4,8 +4,8 @@
   "description": "the schema for a graphql media datail api",
   "main": "index.js",
   "scripts": {
-    "addcommit": "git add --all && git commit",
-    "addcommitpush": "git add --all && git commit && git push",
+    "ac": "git add --all && git commit",
+    "acp": "git add --all && git commit && git push",
     "dev": "cross-env NODE_ENV=development nodemon index.js",
     "migrate_latest": "npx knex migrate:latest --knexfile bin/db/knexfile.js",
     "seed": "npx knex --knexfile bin/db/knexfile.js seed:run",
