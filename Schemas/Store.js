@@ -5,11 +5,13 @@ const typeDefs = `
   }
 
   extend type Mutation {
-    createStore(title: String!, avatarId: Int!, householdId: Int!): Store
+    createStore(title: String!, avatarId: Int!, householdId: Int!,parentId:Int!): Store
     updateStore(
+      id: Int!
       title: String
       avatarId: Int!
       householdId: Int!
+      parentId:Int!
       status: Int
     ): Store
   }
@@ -20,7 +22,7 @@ const typeDefs = `
     avatar: Avatar
     household: Household
     children: [Child]
-    parent: [Parent]
+    parent: Parent
     products: [Product]
     purchases: [Purchase]
   }
@@ -36,12 +38,41 @@ const typeDefs = `
 const resolvers = {
   Query: {
     stores: (_, { lookupId, lookupType }, { dataSources }) => {},
-    store: (_, { id }, { dataSources }) => dataSources.getStoreById(id),
+    store: (_, { id }, { dataSources }) =>
+      dataSources.knexDataSource.getStoreById(id),
+  },
+  Mutation: {
+    createStore: (
+      _,
+      { title, avatarId, householdId, parentId },
+      { dataSources }
+    ) =>
+      dataSources.knexDataSource.createStore({
+        title,
+        avatar_id: avatarId,
+        household_id: householdId,
+        parent_id: parentId,
+      }),
+    updateStore: (
+      _,
+      { id, title, avatarId, householdId, parentId, status },
+      { dataSources }
+    ) =>
+      dataSources.knexDataSource.createStore({
+        id,
+        title,
+        avatar_id: avatarId,
+        household_id: householdId,
+        parent_id: parentId,
+        status,
+      }),
   },
   Store: {
     id: ({ id }, params, { dataSources }) => id,
     household: ({ household_id }, params, { dataSources }) =>
       dataSources.knexDataSource.getHouseholdById(household_id),
+    parent: ({ parent_id }, params, { dataSources }) =>
+      dataSources.knexDataSource.getParentById(parent_id),
     avatar: ({ avatar_id }, params, { dataSources }) =>
       dataSources.knexDataSource.getAvatarById(avatar_id),
     children: ({ id }, params, { dataSources }) =>

@@ -16,7 +16,7 @@ const typeDefs = `
     ): Child
 
     updateChild(
-      childId: Int!
+      id: Int!
       firstname: String
       lastname: String
       avatarId: Int
@@ -33,6 +33,7 @@ const typeDefs = `
     lastname: String
     avatar: Avatar
     age: Int
+    "Birthday is in yyyy-mm-dd format"
     birthday: String
     households: [Household]
     parents: [Parent]
@@ -41,6 +42,7 @@ const typeDefs = `
     purchases: [Purchase]
     stores: [Store]
     accomplishments: [Accomplishment]
+    status: Int
   }
 
   enum ChildLookupType {
@@ -89,8 +91,32 @@ const resolvers = {
         balance,
         household_id: householdId,
       }),
-    updateChild: (root, child_data, { dataSources }) =>
-      dataSources.knexDataSource.updateChild(child_data),
+    updateChild: (
+      root,
+      {
+        id,
+        firstname,
+        lastname,
+        avatarId,
+        birthday,
+        password,
+        balance,
+        householdId,
+        status,
+      },
+      { dataSources }
+    ) =>
+      dataSources.knexDataSource.updateChild({
+        id,
+        first_name: firstname,
+        last_name: lastname,
+        avatar_id: avatarId,
+        birthday,
+        password,
+        balance,
+        household_id: householdId,
+        status,
+      }),
   },
   Child: {
     id: ({ id }) => id,
@@ -98,6 +124,7 @@ const resolvers = {
     birthday: ({ birthday }) => birthday,
     firstname: ({ first_name }) => first_name,
     lastname: ({ last_name }) => last_name,
+    status: ({ status }) => status,
     age: ({ birthday }, _, { dataSources }) =>
       dataSources.knexDataSource.getAgeFromBirthday(birthday),
     avatar: ({ avatar_id }, _, { dataSources }) =>
