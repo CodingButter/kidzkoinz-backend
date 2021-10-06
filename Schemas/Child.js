@@ -6,17 +6,18 @@ const typeDefs = `
 
   extend type Mutation {
     createChild(
-      firtname: String!
+      firstname: String!
       lastname: String!
       avatarId: Int!
+      householdId: Int!
       birthday: String!
       password: String!
       balance: Float
     ): Child
 
     updateChild(
-      childId: Int!
-      firtname: String
+      id: Int!
+      firstname: String
       lastname: String
       avatarId: Int
       birthday: String
@@ -32,6 +33,7 @@ const typeDefs = `
     lastname: String
     avatar: Avatar
     age: Int
+    "Birthday is in yyyy-mm-dd format"
     birthday: String
     households: [Household]
     parents: [Parent]
@@ -40,6 +42,7 @@ const typeDefs = `
     purchases: [Purchase]
     stores: [Store]
     accomplishments: [Accomplishment]
+    status: Int
   }
 
   enum ChildLookupType {
@@ -66,8 +69,54 @@ const resolvers = {
       dataSources.knexDataSource.getChildById(id),
   },
   Mutation: {
-    createChild: (root, params, { dataSources }) => {},
-    updateChild: (root, params, { dataSources }) => {},
+    createChild: (
+      root,
+      {
+        firstname,
+        lastname,
+        avatarId,
+        birthday,
+        password,
+        balance,
+        householdId,
+      },
+      { dataSources }
+    ) =>
+      dataSources.knexDataSource.createChild({
+        first_name: firstname,
+        last_name: lastname,
+        avatar_id: avatarId,
+        birthday,
+        password,
+        balance,
+        household_id: householdId,
+      }),
+    updateChild: (
+      root,
+      {
+        id,
+        firstname,
+        lastname,
+        avatarId,
+        birthday,
+        password,
+        balance,
+        householdId,
+        status,
+      },
+      { dataSources }
+    ) =>
+      dataSources.knexDataSource.updateChild({
+        id,
+        first_name: firstname,
+        last_name: lastname,
+        avatar_id: avatarId,
+        birthday,
+        password,
+        balance,
+        household_id: householdId,
+        status,
+      }),
   },
   Child: {
     id: ({ id }) => id,
@@ -75,6 +124,7 @@ const resolvers = {
     birthday: ({ birthday }) => birthday,
     firstname: ({ first_name }) => first_name,
     lastname: ({ last_name }) => last_name,
+    status: ({ status }) => status,
     age: ({ birthday }, _, { dataSources }) =>
       dataSources.knexDataSource.getAgeFromBirthday(birthday),
     avatar: ({ avatar_id }, _, { dataSources }) =>

@@ -319,5 +319,163 @@ class KnexDataSource {
       large: path,
     };
   }
+  //Create Household
+  async createHousehold(household_data) {
+    const { title, avatar_id, building, street, district, city, postcode } =
+      household_data;
+    const [id] = await this.knex("household").insert({
+      title,
+      avatar_id,
+      building,
+      street,
+      district,
+      city,
+      postcode,
+    });
+    await this.knex("parent_household").insert({
+      parent_id: household_data.parent_id,
+      household_id: id,
+    });
+
+    return { id, ...household_data };
+  }
+
+  //updateHousehold
+  async updateHousehold(household_data) {
+    const {
+      title,
+      avatar_id,
+      building,
+      street,
+      district,
+      city,
+      postcode,
+      status,
+    } = household_data;
+    await this.knex("household")
+      .update({
+        title,
+        avatar_id,
+        building,
+        street,
+        district,
+        city,
+        postcode,
+        status,
+      })
+      .where("id", household_data.id);
+    return await this.knex("household").where("id", household_data.id);
+  }
+  //Create Store
+  async createStore(store_data) {
+    const { title, avatar_id, parent_id, household_id } = store_data;
+    const [id] = await this.knex("store").insert({
+      title,
+      avatar_id,
+      parent_id,
+      household_id,
+    });
+
+    return { id, ...store_data };
+  }
+
+  //update Store
+  async updateStore(store_data) {
+    const { title, avatar_id, parent_id, household_id, status } = store_data;
+    await this.knex("household")
+      .update({
+        title,
+        avatar_id,
+        parent_id,
+        household_id,
+        status,
+      })
+      .where("id", store_data.id);
+    return await this.knex("store").where("id", store_data.id);
+  }
+
+  //Create Child
+  async createChild(child_data) {
+    var { first_name, last_name, avatar_id, birthday, password, balance } =
+      child_data;
+    const [id] = await this.knex("child").insert({
+      first_name,
+      last_name,
+      avatar_id,
+      birthday,
+      password,
+      balance,
+    });
+    await this.knex("child_household").insert({
+      child_id: id,
+      household_id: child_data.household_id,
+    });
+    return { id, ...child_data };
+  }
+  async updateChild(child_data) {
+    var {
+      id,
+      first_name,
+      last_name,
+      avatar_id,
+      birthday,
+      password,
+      balance,
+      status,
+    } = child_data;
+    await this.knex("child")
+      .update({
+        first_name,
+        last_name,
+        avatar_id,
+        birthday,
+        password,
+        balance,
+        status,
+      })
+      .where("id", id);
+    return await this.getChildById(id);
+  }
+
+  //Create
+  async createParent(parent_data) {
+    var { first_name, last_name, avatar_id, birthday, password, balance } =
+      parent_data;
+    const [id] = await this.knex("parent").insert({
+      first_name,
+      last_name,
+      avatar_id,
+      birthday,
+      password,
+      balance,
+    });
+    return { id, ...parent_data };
+  }
+  async updateParent(parent_data) {
+    var {
+      id,
+      first_name,
+      last_name,
+      email,
+      avatar_id,
+      birthday,
+      password,
+      balance,
+      status,
+    } = parent_data;
+    await this.knex("parent")
+      .update({
+        first_name,
+        last_name,
+        avatar_id,
+        birthday,
+        password,
+        email,
+        balance,
+        status,
+      })
+      .where("id", id);
+    return await this.getParentById(id);
+  }
 }
 module.exports = KnexDataSource;

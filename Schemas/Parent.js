@@ -9,13 +9,17 @@ const typeDefs = `
       firstname: String!
       lastname: String!
       avatarId: Int
-      birthday: String
+      birthday: String!
+      email: String!
+      password: String!
     ): Parent
 
     updateParent(
       firstname: String!
       lastname: String!
       avatarId: Int
+      email: String
+      password: String
       birthday: String
       status: Int
     ): Parent
@@ -27,11 +31,13 @@ const typeDefs = `
     lastname: String
     avatar: Avatar
     age: Int
+    "Birthday is in yyyy-mm-dd format"
     birthday: String
     households: [Household]
     children: [Child]
     balance: Float
     stores: [Store]
+    status: Int
   }
 
   enum ParentLookupType {
@@ -48,8 +54,52 @@ const resolvers = {
       dataSources.knexDataSource.getParentById(id),
   },
   Mutation: {
-    createParent: (root, params, dataSources) => {},
-    updateParent: (root, params, dataSources) => {},
+    createParent: (
+      root,
+      {
+        firstname,
+        lastname,
+        avatarId,
+        birthday,
+        password,
+        balance,
+        householdId,
+      },
+      { dataSources }
+    ) =>
+      dataSources.knexDataSource.createParent({
+        first_name: firstname,
+        last_name: lastname,
+        avatar_id: avatarId,
+        birthday,
+        password,
+        balance,
+        household_id: householdId,
+      }),
+    updateParent: (
+      root,
+      {
+        id,
+        firstname,
+        lastname,
+        avatarId,
+        birthday,
+        password,
+        balance,
+        householdId,
+      },
+      { dataSources }
+    ) =>
+      dataSources.knexDataSource.updateParent({
+        id,
+        first_name: firstname,
+        last_name: lastname,
+        avatar_id: avatarId,
+        birthday,
+        password,
+        balance,
+        household_id: householdId,
+      }),
   },
   Parent: {
     id: ({ id }) => id,
@@ -62,7 +112,7 @@ const resolvers = {
     avatar: ({ avatar_id }, _, { dataSources }) =>
       dataSources.knexDataSource.getAvatarById(avatar_id),
     households: ({ id }, _, { dataSources }) =>
-      dataSources.knexDataSource.getHouseholdByParentId(id),
+      dataSources.knexDataSource.getHouseholdsByParentId(id),
     children: ({ id }, params, { dataSources }) =>
       dataSources.knexDataSource.getChildrenByParentId(id),
     stores: ({ id }, params, { dataSources }) =>

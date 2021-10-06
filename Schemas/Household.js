@@ -5,8 +5,8 @@ const typeDefs = `
   }
 
   extend type Mutation {
-    createHousehold(parentId: Int, title: String): Household
-    updateHousehold(status: Int, title: String): Household
+    createHousehold(parentId: Int!, title: String!,avatarId: Int,building: String,number: Int,street: String,district: String,city: String,postalCode: String): Household
+    updateHousehold(status: Int, title: String,avatarId: Int,building: String,number: Int,street: String,district: String,city: String,postalcode: String): Household
   }
 
   type Household {
@@ -48,8 +48,61 @@ const resolvers = {
       dataSources.getHouseholdById({ id }),
   },
   Mutation: {
-    createHousehold: (root, params, { dataSources }) => {},
-    updateHousehold: (root, params, { dataSources }) => {},
+    createHousehold: (
+      root,
+      {
+        parentId,
+        title,
+        avatarId,
+        building,
+        number,
+        street,
+        district,
+        city,
+        postalcode,
+      },
+      { dataSources }
+    ) =>
+      dataSources.knexDataSource.createHousehold({
+        parent_id: parentId,
+        title,
+        avatar_id: avatarId,
+        building,
+        number,
+        street,
+        district,
+        city,
+        postalcode,
+      }),
+    updateHousehold: (
+      root,
+      {
+        id,
+        title,
+        avatarId,
+        building,
+        number,
+        street,
+        district,
+        city,
+        postalcode,
+        status,
+      },
+      { dataSources }
+    ) =>
+      dataSources.knexDataSource.updateHousehold({
+        id,
+        parent_id: parentId,
+        title,
+        avatar_id: avatarId,
+        building,
+        number,
+        street,
+        district,
+        city,
+        postalcode,
+        status,
+      }),
   },
   Household: {
     id: ({ id }) => id,
