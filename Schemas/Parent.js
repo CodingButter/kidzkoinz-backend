@@ -15,12 +15,14 @@ const typeDefs = `
     ): Parent
 
     updateParent(
-      firstname: String!
-      lastname: String!
+      id: Int!
+      firstname: String
+      lastname: String
       avatarId: Int
       email: String
       password: String
       birthday: String
+      dashboard: String
       status: Int
     ): Parent
   }
@@ -65,6 +67,7 @@ const resolvers = {
         password,
         balance,
         householdId,
+        dashboard,
       },
       { dataSources }
     ) =>
@@ -75,6 +78,7 @@ const resolvers = {
         birthday,
         password,
         balance,
+        dashboard,
         household_id: householdId,
       }),
     updateParent: (
