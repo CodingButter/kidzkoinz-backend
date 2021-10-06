@@ -23,6 +23,7 @@ const typeDefs = `
       birthday: String
       password: String
       balance: Float
+      dashboard: String
       status: Int
     ): Child
   }
@@ -42,6 +43,7 @@ const typeDefs = `
     purchases: [Purchase]
     stores: [Store]
     accomplishments: [Accomplishment]
+    dashboard: String
     status: Int
   }
 
@@ -78,6 +80,7 @@ const resolvers = {
         birthday,
         password,
         balance,
+        dashboard,
         householdId,
       },
       { dataSources }
@@ -86,6 +89,7 @@ const resolvers = {
         first_name: firstname,
         last_name: lastname,
         avatar_id: avatarId,
+        dashboard,
         birthday,
         password,
         balance,
@@ -98,6 +102,7 @@ const resolvers = {
         firstname,
         lastname,
         avatarId,
+        dashboard,
         birthday,
         password,
         balance,
@@ -111,6 +116,7 @@ const resolvers = {
         first_name: firstname,
         last_name: lastname,
         avatar_id: avatarId,
+        dashboard,
         birthday,
         password,
         balance,
@@ -125,6 +131,7 @@ const resolvers = {
     firstname: ({ first_name }) => first_name,
     lastname: ({ last_name }) => last_name,
     status: ({ status }) => status,
+    dashboard: ({ dashboard }) => dashboard,
     age: ({ birthday }, _, { dataSources }) =>
       dataSources.knexDataSource.getAgeFromBirthday(birthday),
     avatar: ({ avatar_id }, _, { dataSources }) =>

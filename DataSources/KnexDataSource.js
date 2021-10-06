@@ -204,7 +204,7 @@ class KnexDataSource {
   //Products by Store
 
   async getProductsByStoreId(store_id) {
-    return await this.knex("store").where({ store_id });
+    return await this.knex("product").where({ store_id });
   }
 
   async getFavoritesByChildId(child_id) {

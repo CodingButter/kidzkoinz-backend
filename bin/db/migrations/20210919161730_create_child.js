@@ -8,6 +8,7 @@ exports.up = function (knex) {
     table.integer("avatar_id").references("avatar.id").onDelete("SET NULL");
     table.float("balance").default(0);
     table.integer("status").default(1);
+    table.string("dashboard");
     table.timestamps(true, true);
   });
 };
