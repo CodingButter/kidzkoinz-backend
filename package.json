@@ -10,7 +10,7 @@
     "migrate_latest": "npx knex migrate:latest --knexfile bin/db/knexfile.js",
     "seed": "npx knex --knexfile bin/db/knexfile.js seed:run",
     "migration": "npx knex --knexfile bin/db/knexfile.js migrate:make",
-    "build_db": "cross-env yarn migrate_latest && yarn seed",
+    "build_db": "rm ./bin/db/kidzkoinz.db && cross-env yarn migrate_latest && yarn seed",
     "insert_row": "npx knex --knexfile bin/db/knexfile.js seed:make",
     "test_production": "cross-env NODE_ENV=production node index.js",
     "test": "cross-env NODE_ENV=development jest --detectOpenHandles"
@@ -24,6 +24,7 @@
   "keywords": [],
   "dependencies": {
     "@apollo/federation": "^0.32.0",
+    "amazon-buddy": "^2.2.37",
     "apollo-datasource-rest": "^3.2.0",
     "apollo-server": "^3.3.0",
     "apollo-server-express": "^3.3.0",

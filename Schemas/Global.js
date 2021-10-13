@@ -19,10 +19,11 @@ const typeDefs = `
   }
 
   type Video{
-    id: Int
     title: String
-    path:String
-    source:String
+    thumbnail: String
+    url:String
+    videoWidth: Int
+    videoHeight: Int
   }
 `;
 

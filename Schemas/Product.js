@@ -5,8 +5,8 @@ const typeDefs = `
   }
 
   extend type Mutation {
-    createProduct(name: String!, description: String!, price: Float!): Product
-    updateProduct(name: String, description: String, price: Float): Product
+    createProduct(title: String!, description: String!, price: Float!,externalId:String!): Product
+    updateProduct(id: Int!, title: String, description: String, price: Float): Product
   }
 
   type Product {
@@ -14,8 +14,7 @@ const typeDefs = `
     title: String
     description: String
     externalId:String
-    localImages: [ImageSet]
-    remoteImages:[ImageSet]
+    images:[ImageSet]
     videos:[Video]
     price: Float
     status: Int
@@ -47,19 +46,8 @@ const resolvers = {
     description: ({ description }) => description,
     price: ({ price }) => price,
     externalId: ({ external_id }) => external_id,
-    localImages: async ({ external_id }, _, { dataSources }) =>
-      await dataSources.knexDataSource.getLocalImagesByExternalProductId(
-        external_id
-      ),
-    remoteImages: async (
-      { external_source_id, external_id },
-      _,
-      { dataSources }
-    ) =>
-      await dataSources.knexDataSource.getRemoteImagesByExternalProductId(
-        external_source_id,
-        external_id
-      ),
+    images: async ({ external_id }, _, { dataSources }) =>
+      await dataSources.knexDataSource.getImagesByExternalId(external_id),
     store: async ({ store_id }, _, { dataSources }) =>
       await dataSources.knexDataSource.getStoreById(store_id),
   },

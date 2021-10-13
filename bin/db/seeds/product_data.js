@@ -8,33 +8,48 @@ exports.seed = function (knex) {
       return knex("product_data").insert([
         {
           external_product_id: "B082XJRTMG",
-          data: "B082XJRTMG_1.jpg",
-          data_type: "local_image",
+          data: "https://m.media-amazon.com/images/I/81BTbL0W1FL._AC_SX466_.jpg",
+          data_type: "small_image",
         },
         {
           external_product_id: "B082XJRTMG",
-          data: "81BTbL0W1FL._AC_SX466_.jpg",
-          data_type: "remote_image",
+          data: "https://m.media-amazon.com/images/I/81BTbL0W1FL._AC_SX466_.jpg",
+          data_type: "medium_image",
+        },
+        {
+          external_product_id: "B082XJRTMG",
+          data: "https://m.media-amazon.com/images/I/81BTbL0W1FL._AC_SX466_.jpg",
+          data_type: "large_image",
         },
         {
           external_product_id: "B08CVRCFX3",
-          data: "B08CVRCFX3_1.jpg",
-          data_type: "local_image",
+          data: "https://m.media-amazon.com/images/I/81rmbVHhVUS._AC_SX466_.jpg",
+          data_type: "small_image",
         },
         {
           external_product_id: "B08CVRCFX3",
-          data: "81rmbVHhVUS._AC_SX466_.jpg",
-          data_type: "remote_image",
+          data: "https://m.media-amazon.com/images/I/81rmbVHhVUS._AC_SX466_.jpg",
+          data_type: "medium_image",
+        },
+        {
+          external_product_id: "B08CVRCFX3",
+          data: "https://m.media-amazon.com/images/I/81rmbVHhVUS._AC_SX466_.jpg",
+          data_type: "large_image",
         },
         {
           external_product_id: "B07KWXZ1JN",
-          data: "B07KWXZ1JN_1.jpg",
-          data_type: "local_image",
+          data: "https://m.media-amazon.com/images/I/B07KWXZ1JN_1.jpg",
+          data_type: "small_image",
         },
         {
           external_product_id: "B07KWXZ1JN",
-          data: "618TKaktSIL._AC_SX466_.jpg",
-          data_type: "remote_image",
+          data: "https://m.media-amazon.com/images/I/B07KWXZ1JN_1.jpg",
+          data_type: "medium_image",
+        },
+        {
+          external_product_id: "B07KWXZ1JN",
+          data: "https://m.media-amazon.com/images/I/B07KWXZ1JN_1.jpg",
+          data_type: "large_image",
         },
       ]);
     });

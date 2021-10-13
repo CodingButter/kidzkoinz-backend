@@ -277,22 +277,20 @@ class KnexDataSource {
     return imageSets;
   }
 
-  async getRemoteImagesByExternalProductId(
-    external_source_id,
-    external_product_id
-  ) {
-    const images = await this.knex("product_data").where({
-      data_type: "remote_image",
-      external_product_id,
-    });
-    const imageSets = await Promise.all(
-      images.map(async ({ data }) =>
-        this.getImageSet(
-          await this.getPathExternalSourceId(data, external_source_id)
-        )
-      )
-    );
-    return imageSets;
+  async getImagesByExternalId(external_product_id) {
+    const results = await this.knex("product_data")
+      .whereIn("data_type", ["small_image", "medium_image", "large_image"])
+      .where({ external_product_id })
+      .orderBy("id", "asc");
+    const images = [];
+    for (var i = 0; i < results.length / 3; i++) {
+      images.push({
+        small: results[i].data,
+        medium: results[i + 1].data,
+        large: results[i + 2].data,
+      });
+    }
+    return images;
   }
   async getPathExternalSourceId(path, id) {
     const [externalSource] = await this.knex("external_source").select(
